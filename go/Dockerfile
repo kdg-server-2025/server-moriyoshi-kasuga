@@ -1,4 +1,4 @@
-FROM golang:1.24.3-bookworm
+FROM golang:1.24.3-alpine3.21
 
 COPY . /app
 WORKDIR /app
