@@ -2,7 +2,7 @@
 
 docker build -t test-go --iidfile /tmp/test-go.id .
 
-if [ $? -ne 0 ]; then
+if ! docker build -t test-go --iidfile /tmp/test-go.id .; then
   echo "Docker build failed"
   exit 1
 fi
