@@ -1,0 +1,29 @@
+services:
+  db:
+    image: mysql:9.3.0
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 5
+
+  wordpress:
+    depends_on:
+      db:
+        condition: service_healthy
+    image: wordpress:6.8.1-php8.2-apache
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      WORDPR:SS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
