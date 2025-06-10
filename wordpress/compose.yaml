@@ -1,29 +1,34 @@
 services:
   db:
-    image: mysql:9.3.0
-    volumes:
-      - ./db_data:/var/lib/mysql
+    image: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
+    volumes:
+      - ./mariadb:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 3s
       timeout: 1s
+      start_period: 3s
       retries: 5
 
   wordpress:
     depends_on:
       db:
         condition: service_healthy
-    image: wordpress:6.8.1-php8.2-apache
+
+    image: wordpress
     ports:
-      - "8000:80"
+      - "80:80"
     restart: always
     environment:
-      WORDPR:SS_DB_HOST: db:3306
+      WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./htdocs:/var/www/html
