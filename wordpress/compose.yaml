@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb:lts
+    image: mariadb:11.4.7-noble
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
