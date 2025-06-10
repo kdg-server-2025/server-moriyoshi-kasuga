@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb
+    image: mariadb:lts
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -21,7 +21,7 @@ services:
       db:
         condition: service_healthy
 
-    image: wordpress
+    image: wordpress:6.8.1-php8.2-apache
     ports:
       - "80:80"
     restart: always
